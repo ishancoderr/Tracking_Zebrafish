@@ -52,15 +52,24 @@ async def detectFishByAlgorithems_v2(directory_path: str, output_path: str):
 
         processed_video_paths = []
         background_sub_video_paths = []
+        heatmap_paths = []
+        trajectory_paths = []
         for video_path in filtered_video_paths:
            result = await preprocessing.getVideoFrames(video_path)
             
            processed_video_paths.append(result['processed_video'])
            background_sub_video_paths.append(result['bg_subtracted_video'])
+           heatmap_path = result['heatmap']
+           trajectory_path = result['trajectory_plot']
+            
+           heatmap_paths.append(heatmap_path)
+           trajectory_paths.append(trajectory_path)
 
         return {
             "processed_videos": processed_video_paths,
-            "background_sub_videos": background_sub_video_paths
+            "background_sub_videos": background_sub_video_paths,
+            "heatmaps": heatmap_paths,
+            "trajectory_plots": trajectory_paths
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")    
